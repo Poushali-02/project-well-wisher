@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Well Wisher</title>
+    <link rel="stylesheet" href="{{ url_for ('static', filename = 'css/logout.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="site-name">Well Wisher</div> <!-- Website Name on Left -->
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/games">Play Mini Games</a></li>
+                <li><a href="/talk">Talk to Bot</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+            <button class="menu-toggle">&#9776;</button>
+        </nav>
+    </header>
+    <div class="logout-container">
+        <h2 class="goodbye">You're leaving? 😢👋</h2>
+        <p id="good-bye">We hope to see you again soon.</p>
+        <a id = 'come-again'href="{{ url_for('signup_page') }}" class="logout-btn">Come Back Again</a>
+        <p id="good-bye">We miss you.</p>
+    </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector("nav ul");
+
+    menuToggle.addEventListener("click", function () {
+        navLinks.classList.toggle("active");
+    });
+});
+</script>
+</body>
+</html>

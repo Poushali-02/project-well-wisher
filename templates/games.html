@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Well Wisher</title>
+    <link rel="stylesheet" href="{{ url_for ('static', filename = 'css/games.css') }}">
+</head>
+<body>
+    <header>
+        <nav><!--navbar-->
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+                <span class="site-name">Well Wisher</span>
+            </div>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/games">Play Mini Games</a></li>
+                <li><a href="/talk">Talk to Bot</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+            <button class="menu-toggle">&#9776;</button>
+        </nav>
+    </header>
+<h1>Relax and Play Mini Games</h1>
+
+    <div class="games-container">
+        <div class="game-card" onclick="startMeditation()"><h2>Meditation</h2></div>
+        <div class="game-card" onclick="startDeepBreathing()"><h2>Deep Breathing</h2></div>
+        <div class="game-card" onclick="startPuzzle()"><h2>Solve a Puzzle</h2></div>
+        <div class="game-card" onclick="startMemoryGame()"><h2>Memory Game</h2></div>
+        <div class="game-card" onclick="startReactionTest()"><h2>Reaction Test</h2></div>
+        <div class="game-card" onclick="startWordSearch()"><h2>Word Search</h2></div>
+        <div class="game-card" onclick="startNumberChallenge()"><h2>Number Challenge</h2></div>
+        <div class="game-card" onclick="startClickTarget()"><h2>Click the Target</h2></div>
+        <div class="game-card" onclick="startTypingTest()"><h2>Typing Test</h2></div>
+        <div class="game-card" onclick="startColorMatch()"><h2>Color Matching</h2></div>
+        <div class="game-card" onclick="startMathQuiz()"><h2>Math Quiz</h2></div>
+        <div class="game-card" onclick="startMazeEscape()"><h2>Maze Escape</h2></div>
+        <div class="game-card" onclick="startPatternMatch()"><h2>Pattern Matching</h2></div>
+        <div class="game-card" onclick="startSudoku()"><h2>Sudoku</h2></div>
+        <div class="game-card" onclick="startQuickReflex()"><h2>Quick Reflex</h2></div>
+        <div class="game-card" onclick="startTriviaQuiz()"><h2>Trivia Quiz</h2></div>
+        <div class="game-card" onclick="startSpotDifference()"><h2>Spot the Difference</h2></div>
+        <div class="game-card" onclick="startWordScramble()"><h2>Word Scramble</h2></div>
+        <div class="game-card" onclick="start2048Game()"><h2>2048</h2></div>
+        <div class="game-card" onclick="startBallBounce()"><h2>Ball Bounce Challenge</h2></div>
+    </div>
+
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>
