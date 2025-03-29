@@ -34,11 +34,12 @@
             </div>
         </nav>
     </header>
+    <br><br><br>
 <h1>Relax and Play Mini Games</h1>
 
     <div class="games-container">
-        <div class="game-card" onclick="startMeditation()"><h2>Meditation</h2></div>
-        <div class="game-card" onclick="startDeepBreathing()"><h2>Deep Breathing</h2></div>
+        <div class="game-card" onclick="startMeditation()"><h2>Memory Test</h2></div>
+        <!-- <div class="game-card" onclick="startDeepBreathing()"><h2>Deep Breathing</h2></div>
         <div class="game-card" onclick="startPuzzle()"><h2>Solve a Puzzle</h2></div>
         <div class="game-card" onclick="startMemoryGame()"><h2>Memory Game</h2></div>
         <div class="game-card" onclick="startReactionTest()"><h2>Reaction Test</h2></div>
@@ -56,13 +57,22 @@
         <div class="game-card" onclick="startSpotDifference()"><h2>Spot the Difference</h2></div>
         <div class="game-card" onclick="startWordScramble()"><h2>Word Scramble</h2></div>
         <div class="game-card" onclick="start2048Game()"><h2>2048</h2></div>
-        <div class="game-card" onclick="startBallBounce()"><h2>Ball Bounce Challenge</h2></div>
+        <div class="game-card" onclick="startBallBounce()"><h2>Ball Bounce Challenge</h2></div> -->
     </div>
+     <!-- Rules Modal -->
+     <div id="gameRulesModal" class="modal">
+        <div class="modal-content">
+            <h2 id="gameTitle"></h2>
+            <p id="gameRules"></p>
+            <button onclick="startGame()"><a href="memoryTest.html">Start</a></button>
+            <button onclick="closeModal()">Back</button>
+        </div>
+    </div>
+    </table>
     <footer class="site-footer">
         <p>Made with <i class="fas fa-heart pulse"></i> for your wellbeing</p>
         <p>&copy; 2023 Well Wisher. All rights reserved.</p>
     </footer>
-
-<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+<script src="{{ url_for('static', filename='js/games.js') }}"></script>
 </body>
 </html>
