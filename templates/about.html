@@ -3,26 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Well Wisher</title>
-    <link rel="stylesheet" href="{{ url_for ('static', filename = 'css/about.css') }}">
+    <title>Serenity Hub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Navigation -->
     <header>
-        <nav><!--navbar-->
-            <div class="logo-container">
-                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
-                <span class="site-name">Well Wisher</span>
+        <nav class="glass-nav">
+            <div class="nav-container">
+                <div class="logo-container">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Well Wisher Logo" class="logo">
+                    <span class="site-name">Serenity Hub</span>
+                </div>
+                
+                <ul class="nav-links">
+                    <li><a href="/" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="/games" class="nav-link"><i class="fas fa-gamepad"></i> Mini Games</a></li>
+                    <li><a href="/talk" class="nav-link"><i class="fas fa-robot"></i> Talk to Bot</a></li>
+                    <li><a href="/music" class="nav-link"><i class="fas fa-music"></i> Relaxing Music</a></li>
+                    <li><a href="/about" class="nav-link active"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="/logout" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+                
+                <button class="menu-toggle" aria-label="Toggle navigation">
+                    <span class="hamburger"></span>
+                    <span class="hamburger"></span>
+                    <span class="hamburger"></span>
+                </button>
             </div>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/games">Play Mini Games</a></li>
-                <li><a href="/talk">Talk to Bot</a></li>
-                <li><a href="/about">About</a></li>
-                <li><a href="/logout">Logout</a></li>
-            </ul>
-            <button class="menu-toggle">&#9776;</button>
         </nav>
     </header>
-<script src="{{ url_for ('static', filename='js/about.js')}}"></script>
+
+    <!-- Main Content -->
+    <main class="about-container">
+        <section class="about-hero">
+            <h1 class="hero-title">About Well Wisher</h1>
+            <p class="hero-subtitle">Your personal wellness companion</p>
+        </section>
+
+        <section class="about-content">
+            <div class="about-card">
+                <h2><i class="fas fa-heart"></i> Our Mission</h2>
+                <p>Well Wisher was created to provide a peaceful digital space where you can relax, recharge, and find moments of joy in your busy life. We combine soothing visuals, calming sounds, and positive interactions to help reduce stress and improve mental wellbeing.</p>
+            </div>
+
+            <div class="about-card">
+                <h2><i class="fas fa-lightbulb"></i> Features</h2>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check-circle"></i> Relaxing mini-games to distract and delight</li>
+                    <li><i class="fas fa-check-circle"></i> Supportive chatbot conversations</li>
+                    <li><i class="fas fa-check-circle"></i> Curated calming music collection</li>
+                    <li><i class="fas fa-check-circle"></i> Beautiful, intuitive interface</li>
+                    <li><i class="fas fa-check-circle"></i> Completely free to use</li>
+                </ul>
+            </div>
+
+            <!-- New Talk to Bot Card -->
+            <!-- Updated Talk to Bot Card with List Format -->
+            <div class="about-card">
+                <h2><i class="fas fa-robot"></i> Talk to Bot</h2>
+                <ul class="feature-list">
+                    <li><i class="fas fa-comment-dots"></i> Emotional Support - Our bot provides compassionate responses to help you through tough moments</li>
+                    <li><i class="fas fa-brain"></i> Mindfulness Tips - Get personalized meditation and breathing exercise suggestions</li>
+                    <li><i class="fas fa-smile"></i> Positive Affirmations - Receive uplifting messages tailored to your current mood</li>
+                    <li><i class="fas fa-clock"></i> 24/7 Availability - Always ready to listen whenever you need someone to talk to</li>
+                </ul>
+                <a href="/talk" class="btn" style="margin-top: 1.5rem; display: inline-block;">
+                    Try Our Bot Now <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="about-card team-card">
+                <h2><i class="fas fa-users"></i> The Team</h2>
+                <p>Well Wisher is developed by a small team passionate about mental health and accessible wellness tools. Our goal is to create a space that feels warm, welcoming, and helpful for everyone.</p>
+                <div class="team-members">
+                    <div class="member">
+                        <img src="{{ url_for('static', filename='images/poushali.png') }}" alt="Poushali">
+                        <h3>Poushali</h3>
+                        <p>Founder & Developer</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Made with <i class="fas fa-heart pulse"></i> for your wellbeing</p>
+        <p>&copy; 2023 Well Wisher. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/about.js') }}"></script>
 </body>
 </html>
