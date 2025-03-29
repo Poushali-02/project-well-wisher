@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serene Memory Game</title>
+    <style>
+        :root {
+            --primary-bg: linear-gradient(-45deg, #9fb8ad, #1fc8db, #2cb5e8, #9fb8ad);
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--primary-bg);
+            background-size: 400% 400%;
+            animation: gradientBG 30s ease infinite;
+            font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+            color: #ffffff;
+            transition: background 1s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .difficulty-selector {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .difficulty-btn {
+            padding: 8px 20px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .difficulty-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+        }
+
+        .game-grid {
+            display: grid;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .card {
+            position: relative;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card .front, .card .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border-radius: 10px;
+        }
+
+        .card .front {
+            background: #ffffff;
+            color: #2c3e50;
+            transform: rotateY(180deg);
+        }
+
+        .card .back {
+            background: #2c3e50;
+            color: #ffffff;
+        }
+
+        .card.flipped .front {
+            transform: rotateY(0);
+        }
+
+        .card.flipped .back {
+            transform: rotateY(180deg);
+        }
+
+        .leaderboard {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            width: 300px;
+            backdrop-filter: blur(5px);
+        }
+
+        .leaderboard h3 {
+            margin: 0 0 15px 0;
+            text-align: center;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table td {
+            padding: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .game-grid.easy { grid-template-columns: repeat(4, 1fr); }
+        .game-grid.medium { grid-template-columns: repeat(5, 1fr); }
+        .game-grid.hard { grid-template-columns: repeat(6, 1fr); }
+
+        .card.easy { width: 100px; height: 100px; }
+        .card.medium { width: 80px; height: 80px; }
+        .card.hard { width: 60px; height: 60px; }
+    </style>
+</head>
+<body>
+    <div class="difficulty-selector">
+        <button class="difficulty-btn active" data-level="easy">Easy</button>
+        <button class="difficulty-btn" data-level="medium">Medium</button>
+        <button class="difficulty-btn" data-level="hard">Hard</button>
+    </div>
+
+    <div class="game-container">
+        <div class="stats">
+            Time: <span id="timer">0</span>s | Moves: <span id="moves">0</span>
+        </div>
+        <div class="game-grid easy" id="gameGrid"></div>
+        <button onclick="startGame(currentDifficulty)">New Game</button>
+    </div>
+
+    <div class="leaderboard">
+        <h3>Leaderboard</h3>
+        <div class="difficulty-selector">
+            <button class="difficulty-btn" data-level="all">All</button>
+            <button class="difficulty-btn" data-level="easy">Easy</button>
+            <button class="difficulty-btn" data-level="medium">Medium</button>
+            <button class="difficulty-btn" data-level="hard">Hard</button>
+        </div>
+        <table class="leaderboard-table" id="leaderboard">
+            <tbody id="leaderboardBody"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let icons = [];
+        let flippedCards = [];
+        let moves = 0;
+        let time = 0;
+        let timerId;
+        let matchedPairs = 0;
+        let currentDifficulty = 'easy';
+        let leaderboard = JSON.parse(localStorage.getItem('memoryGameLeaderboard')) || [];
+
+        const difficultySettings = {
+            easy: { pairs: 8, columns: 4, icons: ['🌸', '🎵', '☁️', '🎐', '🕊️', '🌿', '💧', '🕯️'] },
+            medium: { pairs: 10, columns: 5, icons: ['🌸', '🎵', '☁️', '🎐', '🕊️', '🌿', '💧', '🕯️', '🌙', '🎎'] },
+            hard: { pairs: 18, columns: 6, icons: ['🌸', '🎵', '☁️', '🎐', '🕊️', '🌿', '💧', '🕯️', '🌙', '🎎', '🍃', '🌊', '🎑', '🏮', '🍵', '🎶', '🦋', '⛩️'] }
+        };
+
+        document.querySelectorAll('.difficulty-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const level = btn.dataset.level;
+                if (['easy', 'medium', 'hard'].includes(level)) {
+                    currentDifficulty = level;
+                    document.querySelectorAll('.difficulty-btn').forEach(b => 
+                        b.classList.remove('active'));
+                    btn.classList.add('active');
+                    startGame(currentDifficulty);
+                } else if (['all', 'easy', 'medium', 'hard'].includes(level)) {
+                    updateLeaderboard(level);
+                }
+            });
+        });
+
+        function startGame(difficulty) {
+            clearInterval(timerId);
+            const settings = difficultySettings[difficulty];
+            icons = settings.icons.slice(0, settings.pairs);
+            
+            resetGameState();
+            createGameGrid(difficulty, settings);
+            updateLeaderboard('all');
+        }
+
+        function createGameGrid(difficulty, settings) {
+            const gameGrid = document.getElementById('gameGrid');
+            gameGrid.className = `game-grid ${difficulty}`;
+            gameGrid.innerHTML = '';
+            
+            const deck = [...icons, ...icons].sort(() => Math.random() - 0.5);
+            deck.forEach(icon => {
+                const card = document.createElement('div');
+                card.className = `card ${difficulty}`;
+                card.innerHTML = `
+                    <div class="front">${icon}</div>
+                    <div class="back"></div>
+                `;
+                card.addEventListener('click', () => handleCardClick(card, icon));
+                gameGrid.appendChild(card);
+            });
+        }
+
+        function handleCardClick(card, icon) {
+            if (card.classList.contains('flipped') || flippedCards.length === 2) return;
+
+            if (moves === 0) startTimer();
+            
+            card.classList.add('flipped');
+            flippedCards.push({ card, icon });
+
+            if (flippedCards.length === 2) {
+                moves++;
+                document.getElementById('moves').textContent = moves;
+                
+                if (flippedCards[0].icon === flippedCards[1].icon) {
+                    matchedPairs++;
+                    flippedCards = [];
+                    checkWin();
+                } else {
+                    setTimeout(() => {
+                        flippedCards.forEach(c => c.card.classList.remove('flipped'));
+                        flippedCards = [];
+                    }, 1000);
+                }
+            }
+        }
+
+        function checkWin() {
+            if (matchedPairs === icons.length) {
+                clearInterval(timerId);
+                leaderboard.push({
+                    difficulty: currentDifficulty,
+                    time: time,
+                    moves: moves,
+                    date: new Date().toLocaleString()
+                });
+                localStorage.setItem('memoryGameLeaderboard', JSON.stringify(leaderboard));
+                updateLeaderboard('all');
+                alert(`Congratulations!\nTime: ${time}s | Moves: ${moves}`);
+            }
+        }
+
+        function updateLeaderboard(filter) {
+            const tbody = document.getElementById('leaderboardBody');
+            const filtered = leaderboard.filter(entry => 
+                filter === 'all' ? true : entry.difficulty === filter
+            ).sort((a, b) => a.time - b.time || a.moves - b.moves).slice(0, 10);
+
+            tbody.innerHTML = filtered.map(entry => `
+                <tr>
+                    <td>${entry.difficulty.toUpperCase()}</td>
+                    <td>${entry.time}s</td>
+                    <td>${entry.moves}</td>
+                    <td>${entry.date}</td>
+                </tr>
+            `).join('');
+        }
+
+        function startTimer() {
+            timerId = setInterval(() => {
+                time++;
+                document.getElementById('timer').textContent = time;
+            }, 1000);
+        }
+
+        function resetGameState() {
+            time = 0;
+            moves = 0;
+            matchedPairs = 0;
+            flippedCards = [];
+            document.getElementById('timer').textContent = '0';
+            document.getElementById('moves').textContent = '0';
+        }
+
+        // Initial setup
+        startGame(currentDifficulty);
+    </script>
+</body>
+</html>
