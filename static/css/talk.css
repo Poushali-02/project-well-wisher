@@ -159,3 +159,23 @@ nav ul li a:hover {
         padding: 1.5rem;
     }
 }
+.chat-container {
+    width: 300px;
+    margin: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+#chat-box {
+    height: 200px;
+    overflow-y: auto;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+#user-input {
+    width: calc(100% - 60px);
+    padding: 5px;
+}
+button {
+    width: 50px;
+    padding: 5px;
+}
